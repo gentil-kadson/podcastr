@@ -2,6 +2,6 @@ import { Header } from "../components/Header/index"
 
 export default function Home() {
   return (
-    <Header />
+    <h1>Hi, I'm Andy, from Headspace.</h1>
   )
 }
