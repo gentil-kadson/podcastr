@@ -1,7 +1,22 @@
-import { Header } from "../components/Header/index"
+import { Header } from "../components/Header/index";
 
-export default function Home() {
+export default function Home(props) {
   return (
-    <h1>Hi, I'm Andy, from Headspace.</h1>
+    <div>
+      <h1>Hi, Im Andy, from Headspace.</h1>
+      <p>{JSON.stringify(props.episodes)}</p>
+    </div>
   )
+}
+
+export async function getStaticProps() {
+  const response = await fetch("http://localhost:3333/episodes");
+  const data = await response.json();
+
+  return {
+    props: {
+      episodes: data,
+    },
+    revalidate: 60 * 60 * 8, // every 8 hours.
+  };
 }
