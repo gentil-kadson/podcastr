@@ -1,12 +1,17 @@
+//other modules imports
 import { parseISO, format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import convertDurationToTimeString from "../../utils/convertDurationToTimeString";
-import { GetStaticPaths, GetStaticProps } from "next";
-import { useRouter } from "next/router";
+
+// utils/api imports
 import api from "../../services/api";
+import convertDurationToTimeString from "../../utils/convertDurationToTimeString";
+
+//next imports
+import { GetStaticPaths, GetStaticProps } from "next";
 import Link from "next/link";
 import Image from "next/image";
 
+// scss modules
 import styles from "./episode.module.scss";
 
 type Episode = {
@@ -61,8 +66,24 @@ export default function Episode({ episode }: EpisodeProps) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  const { data } = await api.get("episodes", {
+    params: {
+      _limit: 2,
+      _sort: "published_at",
+      _order: "desc",
+    },
+  });
+
+  const paths = data.map((episode) => {
+    return {
+      params: {
+        slug: episode.id,
+      },
+    };
+  });
+
   return {
-    paths: [],
+    paths,
     fallback: "blocking",
   };
 };
